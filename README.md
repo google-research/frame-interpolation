@@ -1,6 +1,6 @@
 # FILM: Frame Interpolation for Large Scene Motion
 
-### [Paper](https://arxiv.org/pdf/2202.04901.pdf) | [YouTube](https://drive.google.com/file/d/1T49i3NXzEB3Hob_IgRV-p7VudntO2wa-/view?usp=sharing) | [Benchmark Scores](https://github.com/google-research/frame-interpolation) <br>
+### [Project](https://film-net.github.io/) | [Paper](https://arxiv.org/pdf/2202.04901.pdf) | [YouTube](https://www.youtube.com/watch?v=OAD-BieIjH4) | [Benchmark Scores](https://github.com/google-research/frame-interpolation) <br>
 
 Tensorflow 2 implementation of our high quality frame interpolation neural network. We present a unified single-network approach that doesn't use additional pre-trained networks, like optical flow or depth, and yet achieve state-of-the-art results. We use a multi-scale feature extractor that shares the same convolution weights across the scales. Our model is trainable from frame triplets alone. <br>
 
@@ -10,6 +10,7 @@ Google Research <br />
 Technical Report 2022.
 
 ![A sample 2 seconds moment.](https://github.com/googlestaging/frame-interpolation/blob/main/moment.gif)
+FILM transforms near-duplicate photos into a slow motion footage that look like it is shot with a video camera.
 
 ## Installation
 
