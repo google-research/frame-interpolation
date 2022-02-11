@@ -11,6 +11,11 @@ Technical Report 2022.
 
 ![A sample 2 seconds moment.](https://github.com/googlestaging/frame-interpolation/blob/main/moment.gif)
 
+## Web Demo
+
+Try the interpolation model with the replicate web demo at 
+[![Replicate](https://replicate.com/google-research/frame-interpolation/badge)](https://replicate.com/google-research/frame-interpolation)
+
 ## Installation
 
 *   Get Frame Interpolation source codes
