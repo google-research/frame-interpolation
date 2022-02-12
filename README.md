@@ -233,6 +233,7 @@ appropriately by citing:
   howpublished = {\url{https://github.com/google-research/frame-interpolation}}
 }
 ```
+Contact: Fitsum Reda (fitsum@google.com)
 
 ## Acknowledgments
 
