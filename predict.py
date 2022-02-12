@@ -2,10 +2,14 @@ import os
 from pathlib import Path
 import numpy as np
 import tempfile
+import tensorflow as tf
 import mediapy
+from PIL import Image
 import cog
 
 from eval import interpolator, util
+
+_UINT8_MAX_F = float(np.iinfo(np.uint8).max)
 
 
 class Predictor(cog.Predictor):
@@ -38,10 +42,21 @@ class Predictor(cog.Predictor):
              "(2^times_to_interpolate + 1) frames, fps of 30.",
     )
     def predict(self, frame1, frame2, times_to_interpolate):
-        INPUT_EXT = ['.png', '.jpg']
+        INPUT_EXT = ['.png', '.jpg', '.jpeg']
         assert os.path.splitext(str(frame1))[-1] in INPUT_EXT and os.path.splitext(str(frame2))[-1] in INPUT_EXT, \
-            "Please provide png or jpg images."
-        
+            "Please provide png, jpg or jpeg images."
+
+        # make sure 2 images are the same size
+        img1 = Image.open(str(frame1))
+        img2 = Image.open(str(frame2))
+        if not img1.size == img2.size:
+            img1 = img1.crop((0, 0, min(img1.size[0], img2.size[0]), min(img1.size[1], img2.size[1])))
+            img2 = img2.crop((0, 0, min(img1.size[0], img2.size[0]), min(img1.size[1], img2.size[1])))
+            frame1 = 'new_frame1.png'
+            frame2 = 'new_frame2.png'
+            img1.save(frame1)
+            img2.save(frame2)
+
         if times_to_interpolate == 1:
             # First batched image.
             image_1 = util.read_image(str(frame1))
