@@ -12,6 +12,11 @@ Technical Report 2022.
 ![A sample 2 seconds moment.](https://github.com/googlestaging/frame-interpolation/blob/main/moment.gif)
 FILM transforms near-duplicate photos into a slow motion footage that look like it is shot with a video camera.
 
+## Web Demo
+
+Try the interpolation model with the replicate web demo at 
+[![Replicate](https://replicate.com/google-research/frame-interpolation/badge)](https://replicate.com/google-research/frame-interpolation)
+
 ## Installation
 
 *   Get Frame Interpolation source codes
