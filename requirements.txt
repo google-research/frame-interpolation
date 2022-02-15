@@ -8,3 +8,4 @@ parameterized==0.8.1
 mediapy==1.0.3
 scikit-image==0.19.1
 apache-beam==2.34.0
+natsort==8.1.0

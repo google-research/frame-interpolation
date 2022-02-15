@@ -73,6 +73,7 @@ from absl import flags
 from absl import logging
 import apache_beam as beam
 import mediapy as media
+import natsort
 import numpy as np
 import tensorflow as tf
 
@@ -143,7 +144,8 @@ class ProcessDirectory(beam.DoFn):
 
   def process(self, directory: str):
     input_frames_list = [
-        tf.io.gfile.glob(f'{directory}/*.{ext}') for ext in _INPUT_EXT
+        natsort.natsorted(tf.io.gfile.glob(f'{directory}/*.{ext}'))
+        for ext in _INPUT_EXT
     ]
     input_frames = functools.reduce(lambda x, y: x + y, input_frames_list)
     logging.info('Generating in-between frames for %s.', directory)
