@@ -34,7 +34,7 @@ Try the interpolation model with the replicate web demo at
 *   Install dependencies
 
 ```
-> pip install -r frame_interpolation/requirements.txt
+> pip3 install -r frame_interpolation/requirements.txt
 > apt-get install ffmpeg
 ```
 
