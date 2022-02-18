@@ -103,7 +103,7 @@ _OUTPUT_VIDEO = flags.DEFINE_boolean(
     'subdirectory')
 
 # Add other extensions, if not either.
-_INPUT_EXT = ['png', 'jpg']
+_INPUT_EXT = ['png', 'jpg', 'jpeg']
 
 
 def _output_frames(frames: List[np.ndarray], frames_dir: str):
