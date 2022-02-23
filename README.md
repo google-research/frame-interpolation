@@ -135,8 +135,11 @@ dataset. Download the [images](https://vision.middlebury.edu/flow/data) and poin
 ```
 > python3 -m frame_interpolation.datasets.create_middlebury_tfrecord \
     --input_dir=<root folder of middlebury-other> \
-    --output_tfrecord_filepath=<output tfrecord filepath>
+    --output_tfrecord_filepath=<output tfrecord filepath> \
+    --num_shards=3
 ```
+
+The above command will output a TFRecord file with 3 shards as `<output tfrecord filepath>@3`.
 
 ## Training
 
@@ -207,7 +210,7 @@ To run an evaluation, simply pass the configuration file of the desired evaluati
 If a GPU is visible, it runs on it.
 
 ```
-> python3 -m frame_interpolation.eval.eval_cli -- \
+> python3 -m frame_interpolation.eval.eval_cli \
      --gin_config frame_interpolation/eval/config/<eval_dataset>.gin \
      --model_path <pretrained_models>/film_net/L1/saved_model
 ```

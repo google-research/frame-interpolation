@@ -63,6 +63,7 @@ import os
 from . import util
 from absl import app
 from absl import flags
+from absl import logging
 import apache_beam as beam
 import tensorflow as tf
 
@@ -95,6 +96,10 @@ _OUTPUT_TFRECORD_FILEPATH = flags.DEFINE_string(
     required=True,
     help='Filepath to the output TFRecord file.')
 
+_NUM_SHARDS = flags.DEFINE_integer('num_shards',
+    default=2,
+    help='Number of shards used for the output.')
+
 # Image key -> basename for frame interpolator: start / middle / end frames.
 _INTERPOLATOR_IMAGES_MAP = {
     'frame_0': 'frame_00.png',
@@ -121,8 +126,11 @@ def main(unused_argv):
        util.ExampleGenerator(_INTERPOLATOR_IMAGES_MAP))
    | 'WriteToTFRecord' >> beam.io.tfrecordio.WriteToTFRecord(
        file_path_prefix=_OUTPUT_TFRECORD_FILEPATH.value,
+       num_shards=_NUM_SHARDS.value,
        coder=beam.coders.BytesCoder()))
 
+  logging.info('Succeeded in creating the output TFRecord file: \'%s@%s\'.',
+    _OUTPUT_TFRECORD_FILEPATH.value, str(_NUM_SHARDS.value))
 
 if __name__ == '__main__':
   app.run(main)
