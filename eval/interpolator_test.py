@@ -28,6 +28,7 @@ from typing import Sequence
 
 from . import interpolator
 from . import util
+from . import splitter
 from absl import app
 from absl import flags
 import numpy as np
@@ -54,6 +55,14 @@ _ALIGN = flags.DEFINE_integer(
     name='align',
     default=None,
     help='If >1, pad the input size so it is evenly divisible by this value.')
+_SLICES = flags.DEFINE_integer(
+    name='slices',
+    default=None,
+    help='Number of slices to process larger images.')
+_PADDING = flags.DEFINE_integer(
+    name='padding',
+    default=20,
+    help='Padding to add to the sliced frames.')
 
 
 def _run_interpolator() -> None:
@@ -61,20 +70,48 @@ def _run_interpolator() -> None:
 
   model_wrapper = interpolator.Interpolator(_MODEL_PATH.value, _ALIGN.value)
 
-  # First batched image.
-  image_1 = util.read_image(_FRAME1.value)
-  image_batch_1 = np.expand_dims(image_1, axis=0)
+  if _SLICES.value is not None:
+    # First image.
+    image_1 = util.read_image(_FRAME1.value)
+    split_images_1 = splitter.splitFrame(image_1, _SLICES.value, _PADDING.value)
 
-  # Second batched image.
-  image_2 = util.read_image(_FRAME2.value)
-  image_batch_2 = np.expand_dims(image_2, axis=0)
+    # Second image.
+    image_2 = util.read_image(_FRAME2.value)
+    split_images_2 = splitter.splitFrame(image_2, _SLICES.value, _PADDING.value)
 
-  # Batched time.
-  batch_dt = np.full(shape=(1,), fill_value=0.5, dtype=np.float32)
+    mid_frame = np.zeros((_SLICES.value**2, image_1.shape[0], image_1.shape[1], 3))
 
-  # Invoke the model once.
-  mid_frame = model_wrapper.interpolate(image_batch_1, image_batch_2,
-                                        batch_dt)[0]
+    for i in range (_SLICES.value**2):
+
+      tile1 = split_images_1[i]
+      tile2 = split_images_2[i]
+
+      image_batch_1 = np.expand_dims(tile1, axis=0)
+      image_batch_2 = np.expand_dims(tile2, axis=0)
+
+      # Batched time.
+      batch_dt = np.full(shape=(1,), fill_value=0.5, dtype=np.float32)
+
+      # Invoke the model once.
+      mid_frame[i,:,:,:] = model_wrapper.interpolate(image_batch_1, image_batch_2,
+                                            batch_dt)[0]
+    mid_frame = splitter.stitchFrames(mid_frame, _SLICES.value, _PADDING.value)
+
+  else:
+    # First batched image.
+    image_1 = util.read_image(_FRAME1.value)
+    image_batch_1 = np.expand_dims(image_1, axis=0)
+
+    # Second batched image.
+    image_2 = util.read_image(_FRAME2.value)
+    image_batch_2 = np.expand_dims(image_2, axis=0)
+
+    # Batched time.
+    batch_dt = np.full(shape=(1,), fill_value=0.5, dtype=np.float32)
+
+    # Invoke the model once.
+    mid_frame = model_wrapper.interpolate(image_batch_1, image_batch_2,
+                                          batch_dt)[0]
 
   # Write interpolated mid-frame.
   mid_frame_filepath = _OUTPUT_FRAME.value
