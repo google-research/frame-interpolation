@@ -19,6 +19,8 @@ Usage example:
    --frame1 <filepath of the first frame> \
    --frame2 <filepath of the second frame> \
    --model_path <The filepath of the TF2 saved model to use>
+   --tiles <The number of tiles to split the input frames into>
+   --padding <The number of pixels to pad the input frames with>
 
 The output is saved to <the directory of the input frames>/output_frame.png. If
 `--output_frame` filepath is provided, it will be used instead.
