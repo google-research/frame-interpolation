@@ -18,9 +18,11 @@ def splitFrame(frame, tiles, overlapping):
     # Add a frame to the image the size of the overlapping pixels
     frame = np.pad(frame, ((overlapping, overlapping), (overlapping, overlapping), (0, 0)), 'constant')
     split_frame = np.zeros((tiles**2, height_split+(2*overlapping), width_split+(2*overlapping), 3))
+    tile = 0
     for i in range(tiles):
         for j in range(tiles):
-            split_frame[i+j, :, :, :] = frame[i*height_split:(i+1)*height_split+(2*overlapping), j*width_split:(j+1)*width_split+(2*overlapping), :]
+            split_frame[tile, :, :, :] = frame[i*height_split:(i+1)*height_split+(2*overlapping), j*width_split:(j+1)*width_split+(2*overlapping), :]
+            tile += 1
     return split_frame
 
 def stitchFrame(split_frame, overlapping):
@@ -41,7 +43,9 @@ def stitchFrame(split_frame, overlapping):
     width_split = split_frame.shape[2] - (2*overlapping)
     stitched_width = side_tiles * width_split-(2*overlapping*side_tiles)
     stitched_height = side_tiles * height_split-(2*overlapping*side_tiles)
+    tile = 0
     for i in range(side_tiles):
         for j in range(side_tiles):
-            stitched_frame[height_split*i:height_split*(i+1), width_split*j:width_split*(j+1), :] = split_frame[i+j,overlapping:height_split+overlapping,overlapping:width_split+overlapping,:]
+            stitched_frame[height_split*i:height_split*(i+1), width_split*j:width_split*(j+1), :] = split_frame[tile,overlapping:height_split+overlapping,overlapping:width_split+overlapping,:]
+            tile += 1
     return stitched_frame
