@@ -50,15 +50,15 @@ def _pad_to_align(x, align):
   bbox_to_pad = {
       'offset_height': height_to_pad // 2,
       'offset_width': width_to_pad // 2,
-      'target_width': height + height_to_pad,
-      'target_height': width + width_to_pad
+      'target_height': height + height_to_pad,
+      'target_width': width + width_to_pad
   }
   padded_x = tf.image.pad_to_bounding_box(x, **bbox_to_pad)
   bbox_to_crop = {
       'offset_height': height_to_pad // 2,
       'offset_width': width_to_pad // 2,
-      'target_width': height,
-      'target_height': width
+      'target_height': height,
+      'target_width': width
   }
   return padded_x, bbox_to_crop
 
