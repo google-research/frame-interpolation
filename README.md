@@ -226,7 +226,7 @@ appropriately by citing:
 
 ```
 @inproceedings{reda2022film,
- title = {Frame Interpolation for Large Motion},
+ title = {FILM: Frame Interpolation for Large Motion},
  author = {Fitsum Reda and Janne Kontkanen and Eric Tabellion and Deqing Sun and Caroline Pantofaru and Brian Curless},
  booktitle = {arXiv},
  year = {2022}
@@ -235,7 +235,7 @@ appropriately by citing:
 
 ```
 @misc{film-tf,
-  title = {Tensorflow 2 Implementation of "FILM: Frame Interpolation for Large Scene Motion"},
+  title = {Tensorflow 2 Implementation of "FILM: Frame Interpolation for Large Motion"},
   author = {Fitsum Reda and Janne Kontkanen and Eric Tabellion and Deqing Sun and Caroline Pantofaru and Brian Curless},
   year = {2022},
   publisher = {GitHub},
