@@ -1,4 +1,4 @@
-# FILM: Frame Interpolation for Large Scene Motion
+# FILM: Frame Interpolation for Large Motion
 
 ### [Project](https://film-net.github.io/) | [Paper](https://arxiv.org/pdf/2202.04901.pdf) | [YouTube](https://www.youtube.com/watch?v=OAD-BieIjH4) | [Benchmark Scores](https://github.com/google-research/frame-interpolation) <br>
 
