@@ -52,8 +52,18 @@ _OUTPUT_FRAME = flags.DEFINE_string(
     help='The output filepath of the interpolated mid-frame.')
 _ALIGN = flags.DEFINE_integer(
     name='align',
-    default=None,
+    default=64,
     help='If >1, pad the input size so it is evenly divisible by this value.')
+_BLOCK_HEIGHT = flags.DEFINE_integer(
+    name='block_height',
+    default=None,
+    help='An int >= 1, number of patches along height, '
+    'patch_height = height//block_height, should be evenly divisible.')
+_BLOCK_WIDTH = flags.DEFINE_integer(
+    name='block_width',
+    default=None,
+    help='An int >= 1, number of patches along width, '
+    'patch_width = width//block_width, should be evenly divisible.')
 
 
 def _run_interpolator() -> None:
@@ -73,8 +83,23 @@ def _run_interpolator() -> None:
   batch_dt = np.full(shape=(1,), fill_value=0.5, dtype=np.float32)
 
   # Invoke the model once.
-  mid_frame = model_wrapper.interpolate(image_batch_1, image_batch_2,
-                                        batch_dt)[0]
+  if _BLOCK_HEIGHT.value is not None and _BLOCK_WIDTH.value is not None:
+    block_shape = [_BLOCK_HEIGHT.value, _BLOCK_WIDTH.value]
+    patches_1 = util.image_to_patches(image_batch_1, block_shape)
+    patches_2 = util.image_to_patches(image_batch_2, block_shape)
+
+    output_patches = []
+    for image_1, image_2 in zip(patches_1, patches_2):
+      image_batch_1 = np.expand_dims(image_1, axis=0)
+      image_batch_2 = np.expand_dims(image_2, axis=0)
+      mid_patch = model_wrapper.interpolate(image_batch_1, image_batch_2,
+                                            batch_dt)
+      output_patches.append(mid_patch)
+    output_patches = np.concatenate(output_patches, axis=0)
+    mid_frame = util.patches_to_image(output_patches, block_shape)[0]
+  else:
+    mid_frame = model_wrapper.interpolate(image_batch_1, image_batch_2,
+                                          batch_dt)[0]
 
   # Write interpolated mid-frame.
   mid_frame_filepath = _OUTPUT_FRAME.value

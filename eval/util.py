@@ -15,13 +15,10 @@
 """Utility functions for frame interpolation on a set of video frames."""
 import os
 import shutil
-import subprocess
 from typing import Generator, Iterable, List
-from typing import Optional
 
 from . import interpolator as interpolator_lib
 from . import util
-from absl import logging
 import numpy as np
 import tensorflow as tf
 
@@ -60,6 +57,59 @@ def write_image(filename: str, image: np.ndarray) -> None:
   else:
     image_data = tf.io.encode_png(image_in_uint8)
   tf.io.write_file(filename, image_data)
+
+
+def image_to_patches(image: np.ndarray, block_shape: List[int]) -> np.ndarray:
+  """Folds an image into patches and stacks along the batch dimension.
+
+  Args:
+    image: The input image of shape [B, H, W, C].
+    block_shape: The number of patches along the height and width to extract.
+      Each patch is shaped (H/block_shape[0], W/block_shape[1])
+  Returns:
+    The extracted patches shaped [num_blocks, patch_height, patch_widht,...],
+      with num_blocks = block_shape[0] * block_shape[1].
+  """
+  block_height, block_width = block_shape
+  num_blocks = block_height * block_width
+
+  height, width, channel = image.shape[-3:]
+  patch_height, patch_width = height//block_height, width//block_width
+  patch_size = patch_height * patch_width
+  paddings = 2*[[0, 0]]
+
+  patches = tf.space_to_batch(image, [patch_height, patch_width], paddings)
+  patches = tf.split(patches, patch_size, 0)
+  patches = tf.stack(patches, channel)
+  patches = tf.reshape(patches,
+                       [num_blocks, patch_height, patch_width, channel])
+  return patches.numpy()
+
+
+def patches_to_image(patches: np.ndarray, block_shape: List[int]) -> np.ndarray:
+  """Unfold patches (stacked along batch) into an image.
+
+  Args:
+    patches: The input patches, shaped [num_patches, patch_H, patch_W, C].
+    block_shape: The number of patches along the height and width to unfold.
+      Each patch assumed to have been (H/block_shape[0], W/block_shape[1]).
+  Returns:
+    The unfolded image shaped [B, H, W, C].
+  """
+  block_height, block_width = block_shape
+  paddings = 2 * [[0, 0]]
+
+  patch_height, patch_width, channel = patches.shape[-3:]
+  patch_size = patch_height * patch_width
+
+  patches = tf.reshape(patches,
+                       [1, block_height, block_width, patch_size, channel])
+  patches = tf.split(patches, patch_size, channel)
+  patches = tf.stack(patches, axis=0)
+  patches = tf.reshape(patches,
+                       [patch_size, block_height, block_width, channel])
+  image = tf.batch_to_space(patches, [patch_height, patch_width], paddings)
+  return image.numpy()
 
 
 def _recursive_generator(

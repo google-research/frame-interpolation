@@ -19,7 +19,21 @@ Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [
 Try the interpolation model with the replicate web demo at 
 [![Replicate](https://replicate.com/google-research/frame-interpolation/badge)](https://replicate.com/google-research/frame-interpolation)
 
-Try FILM to animate from two or more imgaes with the PyTTI-Tools at [![PyTTI-Tools:FILM](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.sandbox.google.com/github/pytti-tools/frame-interpolation/blob/main/PyTTI_Tools_FiLM-colab.ipynb#scrollTo=-7TD7YZJbsy_)
+Try FILM to interpolate between two or more images with the PyTTI-Tools at [![PyTTI-Tools:FILM](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.sandbox.google.com/github/pytti-tools/frame-interpolation/blob/main/PyTTI_Tools_FiLM-colab.ipynb#scrollTo=-7TD7YZJbsy_)
+
+## Change Log
+
+* **Mar 09, 2022**: Support for very high resolution frame interpolation. Set `--block_height` and `--block_width` to extract patches from the inputs, and reconstruct the interpolated frame from the interpolated patches. The example below will extract four patches (2x2), and runs iteratively.
+
+     ```
+     > python3 -m frame_interpolation.eval.interpolator_test \
+          --frame1 frame_interpolation/photos/one.png \
+          --frame2 frame_interpolation/photos/two.png \
+          --model_path <pretrained_models>/film_net/Style/saved_model \
+          --block_height 2 --block_width 2 \
+          --output_frame frame_interpolation/photos/output_frame.png \
+     ```
+
 
 ## Installation
 

@@ -96,6 +96,10 @@ _FPS = flags.DEFINE_integer(
     name='fps',
     default=30,
     help='Frames per second to play interpolated videos in slow motion.')
+_ALIGN = flags.DEFINE_integer(
+    name='align',
+    default=64,
+    help='If >1, pad the input size so it is evenly divisible by this value.')    
 _OUTPUT_VIDEO = flags.DEFINE_boolean(
     name='output_video',
     default=False,
@@ -136,7 +140,7 @@ class ProcessDirectory(beam.DoFn):
 
   def setup(self):
     self.interpolator = interpolator_lib.Interpolator(
-        _MODEL_PATH.value)
+        _MODEL_PATH.value, _ALIGN.value)
 
     if _OUTPUT_VIDEO.value:
       ffmpeg_path = util.get_ffmpeg_path()
