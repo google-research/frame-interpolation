@@ -19,6 +19,8 @@ Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [
 Try the interpolation model with the replicate web demo at 
 [![Replicate](https://replicate.com/google-research/frame-interpolation/badge)](https://replicate.com/google-research/frame-interpolation)
 
+Try FILM to animate from two or more imgaes with the PyTTI-Tools at [![PyTTI-Tools:FILM](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.sandbox.google.com/github/pytti-tools/frame-interpolation/blob/main/PyTTI_Tools_FiLM-colab.ipynb#scrollTo=-7TD7YZJbsy_)
+
 ## Installation
 
 *   Get Frame Interpolation source codes
