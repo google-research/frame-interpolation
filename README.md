@@ -23,17 +23,7 @@ Try FILM to interpolate between two or more images with the PyTTI-Tools at [![Py
 
 ## Change Log
 
-* **Mar 09, 2022**: Support for very high resolution frame interpolation. Set `--block_height` and `--block_width` to extract patches from the inputs, and reconstruct the interpolated frame from the interpolated patches. The example below will extract four patches (2x2), and runs iteratively.
-
-     ```
-     > python3 -m frame_interpolation.eval.interpolator_test \
-          --frame1 frame_interpolation/photos/one.png \
-          --frame2 frame_interpolation/photos/two.png \
-          --model_path <pretrained_models>/film_net/Style/saved_model \
-          --block_height 2 --block_width 2 \
-          --output_frame frame_interpolation/photos/output_frame.png \
-     ```
-
+* **Mar 09, 2022**: Support for **high resolution frame interpolation**. Set `--block_height` and `--block_width` in `eval.interpolator_test` to extract patches from the inputs, and reconstruct the interpolated frame from the interatively interpolated patches.
 
 ## Installation
 
@@ -95,7 +85,7 @@ To generate an intermediate photo from the input near-duplicate photos, simply r
      --frame1 frame_interpolation/photos/one.png \
      --frame2 frame_interpolation/photos/two.png \
      --model_path <pretrained_models>/film_net/Style/saved_model \
-     --output_frame frame_interpolation/photos/middle.png \
+     --output_frame frame_interpolation/photos/middle.png
 ```
 
 This will produce the sub-frame at `t=0.5` and save as
@@ -241,7 +231,7 @@ If you find this implementation useful in your works, please acknowledge it
 appropriately by citing:
 
 ```
-@inproceedings{reda2022film,
+@article{reda2022film,
  title = {FILM: Frame Interpolation for Large Motion},
  author = {Fitsum Reda and Janne Kontkanen and Eric Tabellion and Deqing Sun and Caroline Pantofaru and Brian Curless},
  booktitle = {arXiv},

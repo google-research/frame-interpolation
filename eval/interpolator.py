@@ -102,8 +102,8 @@ class Interpolator:
 
     inputs = {'x0': x0, 'x1': x1, 'time': dt[..., np.newaxis]}
     result = self._model(inputs, training=False)
-    image = result['image'].numpy()
+    image = result['image']
 
     if self._align is not None:
-      return tf.image.crop_to_bounding_box(image, **bbox_to_crop)
-    return image
+      image = tf.image.crop_to_bounding_box(image, **bbox_to_crop)
+    return image.numpy()
