@@ -23,7 +23,8 @@ Try FILM to interpolate between two or more images with the PyTTI-Tools at [![Py
 
 ## Change Log
 
-* **Mar 09, 2022**: Support for **high resolution frame interpolation**. Set `--block_height` and `--block_width` in `eval.interpolator_test` to extract patches from the inputs, and reconstruct the interpolated frame from the interatively interpolated patches.
+* **Mar 12, 2022**: Support for Windows, see [WINDOWS_INSTALLATION.md](https://github.com/googlestaging/frame-interpolation/blob/main/WINDOWS_INSTALLATION.m).
+* **Mar 09, 2022**: Support for **high resolution frame interpolation**. Set `--block_height` and `--block_width` in `eval.interpolator_test` to extract patches from the inputs, and reconstruct the interpolated frame from the iteratively interpolated patches.
 
 ## Installation
 
@@ -39,12 +40,19 @@ Try FILM to interpolate between two or more images with the PyTTI-Tools at [![Py
 > docker pull gcr.io/deeplearning-platform-release/tf2-gpu.2-6:latest
 ```
 
-*   Install dependencies
+* If you do not use Docker, set up your NVIDIA GPU environment with:
+    * [Anaconda Python 3.9](https://www.anaconda.com/products/individual)
+    * [CUDA Toolkit 11.2.1](https://developer.nvidia.com/cuda-11.2.1-download-archive)
+    * [cuDNN 8.1.0](https://developer.nvidia.com/rdp/cudnn-download)
+
+*   Install frame interpolation dependencies
 
 ```
 > pip3 install -r frame_interpolation/requirements.txt
 > apt-get install ffmpeg
 ```
+
+### See [WINDOWS_INSTALLATION](https://github.com/googlestaging/frame-interpolation/blob/main/WINDOWS_INSTALLATION.m) for Windows Support
 
 ## Pre-trained Models
 
