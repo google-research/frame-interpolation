@@ -23,7 +23,7 @@ Try FILM to interpolate between two or more images with the PyTTI-Tools at [![Py
 
 ## Change Log
 
-* **Mar 12, 2022**: Support for Windows, see [WINDOWS_INSTALLATION.md](https://github.com/googlestaging/frame-interpolation/blob/main/WINDOWS_INSTALLATION.m).
+* **Mar 12, 2022**: Support for Windows, see [WINDOWS_INSTALLATION.md](https://github.com/google-research/frame-interpolation/blob/main/WINDOWS_INSTALLATION.md).
 * **Mar 09, 2022**: Support for **high resolution frame interpolation**. Set `--block_height` and `--block_width` in `eval.interpolator_test` to extract patches from the inputs, and reconstruct the interpolated frame from the iteratively interpolated patches.
 
 ## Installation
@@ -52,7 +52,7 @@ Try FILM to interpolate between two or more images with the PyTTI-Tools at [![Py
 > apt-get install ffmpeg
 ```
 
-### See [WINDOWS_INSTALLATION](https://github.com/googlestaging/frame-interpolation/blob/main/WINDOWS_INSTALLATION.m) for Windows Support
+### See [WINDOWS_INSTALLATION](https://github.com/google-research/frame-interpolation/blob/main/WINDOWS_INSTALLATION.md) for Windows Support
 
 ## Pre-trained Models
 
