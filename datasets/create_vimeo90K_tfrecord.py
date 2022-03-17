@@ -137,7 +137,7 @@ _INTERPOLATOR_IMAGES_MAP = {
 }
 
 
-def main():
+def main(unused_argv):
   """Creates and runs a Beam pipeline to write frame triplets as a TFRecord."""
   with tf.io.gfile.GFile(_INTPUT_TRIPLET_LIST_FILEPATH.value, 'r') as fid:
     triplets_list = np.loadtxt(fid, dtype=str)
@@ -149,7 +149,6 @@ def main():
         for image_key, image_basename in _INTERPOLATOR_IMAGES_MAP.items()
     }
     triplet_dicts.append(triplet_dict)
-
   p = beam.Pipeline('DirectRunner')
   (p | 'ReadInputTripletDicts' >> beam.Create(triplet_dicts)  # pylint: disable=expression-not-assigned
    | 'GenerateSingleExample' >> beam.ParDo(
@@ -158,6 +157,8 @@ def main():
        file_path_prefix=_OUTPUT_TFRECORD_FILEPATH.value,
        num_shards=_NUM_SHARDS.value,
        coder=beam.coders.BytesCoder()))
+  result = p.run()
+  result.wait_until_finish()
 
   logging.info('Succeeded in creating the output TFRecord file: \'%s@%s\'.',
     _OUTPUT_TFRECORD_FILEPATH.value, str(_NUM_SHARDS.value))

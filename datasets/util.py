@@ -16,7 +16,7 @@
 
 import io
 import os
-from typing import List, Mapping, Optional
+from typing import Any, List, Mapping, Optional
 
 from absl import logging
 import apache_beam as beam
@@ -172,7 +172,7 @@ class ExampleGenerator(beam.DoFn):
   """Generate a tf.train.Example per input image triplet filepaths."""
 
   def __init__(self,
-               images_map: Mapping[str, int],
+               images_map: Mapping[str, Any],
                scale_factor: int = 1,
                center_crop_factor: int = 1):
     """Initializes the map of 3 images to add to each tf.train.Example.

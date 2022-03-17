@@ -136,6 +136,8 @@ def main(unused_argv):
        file_path_prefix=_OUTPUT_TFRECORD_FILEPATH.value,
        num_shards=_NUM_SHARDS.value,
        coder=beam.coders.BytesCoder()))
+  result = p.run()
+  result.wait_until_finish()
 
   logging.info('Succeeded in creating the output TFRecord file: \'%s@%s\'.',
     _OUTPUT_TFRECORD_FILEPATH.value, str(_NUM_SHARDS.value))
