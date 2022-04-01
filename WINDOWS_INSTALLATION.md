@@ -66,7 +66,7 @@
 > pip install -r frame_interpolation/requirements.txt
 > conda install -c conda-forge ffmpeg
 ```
-* Download pre-traned models, detailed [here](https://github.com/google-research/frame-interpolation#pre-trained-models).
+* Download pre-trained models, detailed [here](https://github.com/google-research/frame-interpolation#pre-trained-models).
 
 ## Running the Codes
 * One mid-frame interpolation. Note: `python3` may not be recognized in Windows, so simply drop `3` as below.
