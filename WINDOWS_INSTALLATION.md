@@ -19,7 +19,7 @@
 ### Activate the Anaconda virtual environment
 * Activate the newly created virtual environment by typing in your terminal (Command Prompt or PowerShell)
 ```
-> conda actiate frame_interpolation
+> conda activate frame_interpolation
 ```
 * Once activated, your terminal should look like:
 ```
