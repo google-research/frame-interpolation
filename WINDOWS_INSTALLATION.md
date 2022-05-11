@@ -2,13 +2,13 @@
 
 ## Anaconda Python 3.9 (Optional)
 
-### Install Anaconda3 Python3.9
+#### Install Anaconda3 Python3.9
 * Go to [https://www.anaconda.com/products/individual](https://www.anaconda.com/products/individual) and click the "Download" button.
 * Download the Windows [64-Bit](https://repo.anaconda.com/archive/Anaconda3-2021.11-Windows-x86_64.exe) or [32-bit](https://repo.anaconda.com/archive/Anaconda3-2021.11-Windows-x86.exe) Graphical Installer, depending on your system needs.
 * Run the downloaded (`.exe`) file to begin the installation.
 * (Optional) Check the "Add Anaconda3 to my PATH environment variable". You may get a 'red text' warning of its implications, you may ignore it for this setup.
 
-### Create a new Anaconda virtual environment
+#### Create a new Anaconda virtual environment
 * Open a new Terminal
 * Type the following command:
 ```
@@ -16,10 +16,10 @@
 ```
 * The above command will create a new virtual environment with the name `frame_interpolation`
 
-### Activate the Anaconda virtual environment
+#### Activate the Anaconda virtual environment
 * Activate the newly created virtual environment by typing in your terminal (Command Prompt or PowerShell)
 ```
-> conda actiate frame_interpolation
+> conda activate frame_interpolation
 ```
 * Once activated, your terminal should look like:
 ```
@@ -27,19 +27,19 @@
 ```
 
 ## NVIDIA GPU Support
-### Install CUDA Toolkit
+#### Install CUDA Toolkit
 * Go to [https://developer.nvidia.com/cuda-11.2.1-download-archive](https://developer.nvidia.com/cuda-11.2.1-download-archive) and select your `Windows`.
 * Download and install `CUDA Tookit 11.2.1`.
 * Additional CUDA installation information available [here](https://docs.nvidia.com/cuda/archive/11.2.2/cuda-installation-guide-microsoft-windows/index.html).
 
-### Install cuDNN
+#### Install cuDNN
 * Go to [https://developer.nvidia.com/rdp/cudnn-download](https://developer.nvidia.com/rdp/cudnn-download).
 * Create a user profile (if needed) and login.
 * Select `cuDNN v8.1.0 (January 26th, 2021), for CUDA 11.0,11.1 and 11.2`.
 * Download [cuDNN Library for Widnows (x86)](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/8.1.0.77/11.2_20210127/cudnn-11.2-windows-x64-v8.1.0.77.zip). 
 * Extract the contents of the zipped folder (it contains a folder named `cuda`) into `<INSTALL_PATH>\NVIDIA GPU Computing Toolkit\CUDA\v11.2\`. `<INSTALL_PATH>` points to the installation directory specified during CUDA Toolkit installation. By default, `<INSTAL_PATH> = C:\Program Files`.
 
-### Environment Setup
+#### Environment Setup
 * Add the following paths to your 'Advanced System Settings' > 'Environment Variables ...' > Edit 'Path', and add:
     * <INSTALL_PATH>\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin
     * <INSTALL_PATH>\NVIDIA GPU Computing Toolkit\CUDA\v11.2\libnvvp
@@ -47,7 +47,7 @@
     * <INSTALL_PATH>\NVIDIA GPU Computing Toolkit\CUDA\v11.2\extras\CUPTI\lib64
     * <INSTALL_PATH>\NVIDIA GPU Computing Toolkit\CUDA\v11.2\cuda\bin
 
-### Verify Installation
+#### Verify Installation
 * Open a **new** terminal and type `conda activate frame_interpolation`.
 * Install (temporarily) tensorflow and run a simple operation, by typing:
 ```
