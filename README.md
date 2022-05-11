@@ -21,6 +21,8 @@ Try the interpolation model with the replicate web demo at
 
 Try FILM to interpolate between two or more images with the PyTTI-Tools at [![PyTTI-Tools:FILM](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.sandbox.google.com/github/pytti-tools/frame-interpolation/blob/main/PyTTI_Tools_FiLM-colab.ipynb#scrollTo=-7TD7YZJbsy_)
 
+An alternative Colab for running FILM on arbitrarily more images, rather than two, [![FILM-Gdrive](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.sandbox.google.com/drive/1sK0uc-GJxmdnaxHhYqD2afRknakpdTNZ)
+
 ## Change Log
 
 * **Mar 12, 2022**: Support for Windows, see [WINDOWS_INSTALLATION.md](https://github.com/google-research/frame-interpolation/blob/main/WINDOWS_INSTALLATION.md).
