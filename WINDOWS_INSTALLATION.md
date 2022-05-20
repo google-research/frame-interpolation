@@ -71,29 +71,16 @@
 ## Running the Codes
 * One mid-frame interpolation. Note: `python3` may not be recognized in Windows, so simply drop `3` as below.
 ```
-> python -m frame_interpolation.eval.interpolator_test ^
-    --frame1 frame_interpolation\photos\one.png ^
-    --frame2 frame_interpolation\photos\two.png ^
-    --model_path <pretrained_models>\film_net\Style\saved_model ^
-    --output_frame frame_interpolation\photos\middle.png
+> python -m frame_interpolation.eval.interpolator_test --frame1 frame_interpolation\photos\one.png --frame2 frame_interpolation\photos\two.png --model_path <pretrained_models>\film_net\Style\saved_model --output_frame frame_interpolation\photos\middle.png
 ```
 
 * Large resolution mid-frame interpolation: Set `block_height` and `--block_width` to subdivide along the height and width to create patches, where the interpolator will be run iteratively, and the resulting interpolated mid-patches will be reconstructed into a final mid-frame. In the example below, will create and run on 4 patches (2*2).
 ```
-> python -m frame_interpolation.eval.interpolator_test ^
-    --frame1 frame_interpolation\photos\one.png ^
-    --frame2 frame_interpolation\photos\two.png ^
-    --block_height 2 --block_wdith 2 ^
-    --model_path <pretrained_models>\film_net\Style\saved_model ^
-    --output_frame frame_interpolation\photos\output_frame.png
+> python -m frame_interpolation.eval.interpolator_test --frame1 frame_interpolation\photos\one.png --frame2 frame_interpolation\photos\two.png --block_height 2 --block_wdith 2 --model_path <pretrained_models>\film_net\Style\saved_model --output_frame frame_interpolation\photos\output_frame.png
 ```
 * Many in-between frames interpolation
 ```
-> python -m frame_interpolation.eval.interpolator_cli ^
-     --pattern "frame_interpolation\photos" ^
-     --model_path <pretrained_models>\film_net\Style\saved_model ^
-     --times_to_interpolate 6 ^
-     --output_video
+> python -m frame_interpolation.eval.interpolator_cli --pattern "frame_interpolation/photos" --model_path <pretrained_models>\film_net\Style\saved_model --times_to_interpolate 6 --output_video
 ```
 
 ## Acknowledgments
