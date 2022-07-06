@@ -7,7 +7,7 @@ Tensorflow 2 implementation of our high quality frame interpolation neural netwo
 [FILM: Frame Interpolation for Large Motion](https://arxiv.org/abs/2202.04901) <br />
 [Fitsum Reda](https://fitsumreda.github.io/)<sup>1</sup>, [Janne Kontkanen](https://scholar.google.com/citations?user=MnXc4JQAAAAJ&hl=en)<sup>1</sup>, [Eric Tabellion](http://www.tabellion.org/et/)<sup>1</sup>, [Deqing Sun](https://deqings.github.io/)<sup>1</sup>, [Caroline Pantofaru](https://scholar.google.com/citations?user=vKAKE1gAAAAJ&hl=en)<sup>1</sup>, [Brian Curless](https://homes.cs.washington.edu/~curless/)<sup>1,2</sup><br />
 <sup>1</sup>Google Research, <sup>2</sup>University of Washington<br />
-Technical Report 2022.
+In ECCV 2022.
 
 ![A sample 2 seconds moment.](https://github.com/googlestaging/frame-interpolation/blob/main/moment.gif)
 FILM transforms near-duplicate photos into a slow motion footage that look like it is shot with a video camera.
@@ -244,7 +244,7 @@ appropriately by citing:
 @article{reda2022film,
  title = {FILM: Frame Interpolation for Large Motion},
  author = {Fitsum Reda and Janne Kontkanen and Eric Tabellion and Deqing Sun and Caroline Pantofaru and Brian Curless},
- booktitle = {arXiv},
+ booktitle = {ECCV},
  year = {2022}
 }
 ```
