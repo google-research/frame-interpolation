@@ -244,7 +244,7 @@ appropriately by citing:
 @article{reda2022film,
  title = {FILM: Frame Interpolation for Large Motion},
  author = {Fitsum Reda and Janne Kontkanen and Eric Tabellion and Deqing Sun and Caroline Pantofaru and Brian Curless},
- booktitle = {ECCV},
+ booktitle = {The European Conference on Computer Vision (ECCV)},
  year = {2022}
 }
 ```
