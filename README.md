@@ -105,7 +105,7 @@ This will produce the sub-frame at `t=0.5` and save as
 
 Takes in a set of directories identified by a glob (--pattern). Each directory
 is expected to contain at least two input frames, with each contiguous frame
-pair treated as an input to generate in-between frames.
+pair treated as an input to generate in-between frames. Filenames of frames should be named such that when sorted, naturally with `natsort`, their desired order is unchanged.
 
 ```
 > python3 -m frame_interpolation.eval.interpolator_cli \
