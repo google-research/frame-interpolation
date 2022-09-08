@@ -12,14 +12,14 @@
 * Open a new Terminal
 * Type the following command:
 ```
-> conda create -n frame_interpolation pip python=3.9
+conda create -n frame_interpolation pip python=3.9
 ```
 * The above command will create a new virtual environment with the name `frame_interpolation`
 
 #### Activate the Anaconda virtual environment
 * Activate the newly created virtual environment by typing in your terminal (Command Prompt or PowerShell)
 ```
-> conda activate frame_interpolation
+conda activate frame_interpolation
 ```
 * Once activated, your terminal should look like:
 ```
@@ -51,36 +51,36 @@
 * Open a **new** terminal and type `conda activate frame_interpolation`.
 * Install (temporarily) tensorflow and run a simple operation, by typing:
 ```
-> pip install --ignore-installed --upgrade tensorflow==2.6.0
-> python -c "import tensorflow as tf;print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
+pip install --ignore-installed --upgrade tensorflow==2.6.0
+python -c "import tensorflow as tf;print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
 ```
 * You should see success messages: 'Created device /job:localhost/replica:0/task:0/device:GPU:0'.
 
 ## FILM Installation
 * Get Frame Interpolation source codes
 ```
-> git clone https://github.com/google-research/frame-interpolation frame_interpolation
+git clone https://github.com/google-research/frame-interpolation frame_interpolation
 ```
 * Install dependencies
 ```
-> pip install -r frame_interpolation/requirements.txt
-> conda install -c conda-forge ffmpeg
+pip install -r frame_interpolation/requirements.txt
+conda install -c conda-forge ffmpeg
 ```
 * Download pre-traned models, detailed [here](https://github.com/google-research/frame-interpolation#pre-trained-models).
 
 ## Running the Codes
-* One mid-frame interpolation. Note: `python3` may not be recognized in Windows, so simply drop `3` as below.
+* One mid-frame interpolation. Note: `python3` may not be recognized in Windows, so simply drop `3` as below, and fill in the <pretrained_models> location.
 ```
-> python -m frame_interpolation.eval.interpolator_test --frame1 frame_interpolation\photos\one.png --frame2 frame_interpolation\photos\two.png --model_path <pretrained_models>\film_net\Style\saved_model --output_frame frame_interpolation\photos\middle.png
+python -m frame_interpolation.eval.interpolator_test --frame1 frame_interpolation\photos\one.png --frame2 frame_interpolation\photos\two.png --model_path <pretrained_models>\film_net\Style\saved_model --output_frame frame_interpolation\photos\middle.png
 ```
 
 * Large resolution mid-frame interpolation: Set `block_height` and `--block_width` to subdivide along the height and width to create patches, where the interpolator will be run iteratively, and the resulting interpolated mid-patches will be reconstructed into a final mid-frame. In the example below, will create and run on 4 patches (2*2).
 ```
-> python -m frame_interpolation.eval.interpolator_test --frame1 frame_interpolation\photos\one.png --frame2 frame_interpolation\photos\two.png --block_height 2 --block_wdith 2 --model_path <pretrained_models>\film_net\Style\saved_model --output_frame frame_interpolation\photos\output_frame.png
+python -m frame_interpolation.eval.interpolator_test --frame1 frame_interpolation\photos\one.png --frame2 frame_interpolation\photos\two.png --block_height 2 --block_wdith 2 --model_path <pretrained_models>\film_net\Style\saved_model --output_frame frame_interpolation\photos\output_frame.png
 ```
 * Many in-between frames interpolation
 ```
-> python -m frame_interpolation.eval.interpolator_cli --pattern "frame_interpolation/photos" --model_path <pretrained_models>\film_net\Style\saved_model --times_to_interpolate 6 --output_video
+python -m frame_interpolation.eval.interpolator_cli --pattern "frame_interpolation/photos" --model_path <pretrained_models>\film_net\Style\saved_model --times_to_interpolate 6 --output_video
 ```
 
 ## Acknowledgments
