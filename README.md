@@ -2,7 +2,7 @@
 
 ### [Project](https://film-net.github.io/) | [Paper](https://arxiv.org/pdf/2202.04901.pdf) | [YouTube](https://www.youtube.com/watch?v=OAD-BieIjH4) | [Benchmark Scores](https://github.com/google-research/frame-interpolation) <br>
 
-Tensorflow 2 implementation of our high quality frame interpolation neural network. We present a unified single-network approach that doesn't use additional pre-trained networks, like optical flow or depth, and yet achieve state-of-the-art results. We use a multi-scale feature extractor that shares the same convolution weights across the scales. Our model is trainable from frame triplets alone. <br>
+The official Tensorflow 2 implementation of our high quality frame interpolation neural network. We present a unified single-network approach that doesn't use additional pre-trained networks, like optical flow or depth, and yet achieve state-of-the-art results. We use a multi-scale feature extractor that shares the same convolution weights across the scales. Our model is trainable from frame triplets alone. <br>
 
 [FILM: Frame Interpolation for Large Motion](https://arxiv.org/abs/2202.04901) <br />
 [Fitsum Reda](https://fitsumreda.github.io/)<sup>1</sup>, [Janne Kontkanen](https://scholar.google.com/citations?user=MnXc4JQAAAAJ&hl=en)<sup>1</sup>, [Eric Tabellion](http://www.tabellion.org/et/)<sup>1</sup>, [Deqing Sun](https://deqings.github.io/)<sup>1</sup>, [Caroline Pantofaru](https://scholar.google.com/citations?user=vKAKE1gAAAAJ&hl=en)<sup>1</sup>, [Brian Curless](https://homes.cs.washington.edu/~curless/)<sup>1,2</sup><br />
