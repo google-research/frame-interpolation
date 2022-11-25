@@ -33,7 +33,8 @@ An alternative Colab for running FILM on arbitrarily more images, rather than tw
 *   Get Frame Interpolation source codes
 
 ```
-git clone https://github.com/google-research/frame-interpolation frame_interpolation
+git clone https://github.com/google-research/frame-interpolation
+cd frame-interpolation
 ```
 
 *   Optionally, pull the recommended Docker base image
@@ -50,7 +51,7 @@ docker pull gcr.io/deeplearning-platform-release/tf2-gpu.2-6:latest
 *   Install frame interpolation dependencies
 
 ```
-pip3 install -r frame_interpolation/requirements.txt
+pip3 install -r requirements.txt
 sudo apt-get install -y ffmpeg
 ```
 
@@ -75,8 +76,8 @@ The downloaded folder should have the following structure:
 <pretrained_models>/
 ├── film_net/
 │   ├── L1/
-│   ├── VGG/
 │   ├── Style/
+│   ├── VGG/
 ├── vgg/
 │   ├── imagenet-vgg-verydeep-19.mat
 ```
@@ -84,22 +85,21 @@ The downloaded folder should have the following structure:
 ## Running the Codes
 
 The following instructions run the interpolator on the photos provided in
-frame_interpolation/photos.
+'frame-interpolation/photos'.
 
 ### One mid-frame interpolation
 
 To generate an intermediate photo from the input near-duplicate photos, simply run:
 
 ```
-python3 -m frame_interpolation.eval.interpolator_test \
-   --frame1 frame_interpolation/photos/one.png \
-   --frame2 frame_interpolation/photos/two.png \
+python3 -m eval.interpolator_test \
+   --frame1 photos/one.png \
+   --frame2 photos/two.png \
    --model_path <pretrained_models>/film_net/Style/saved_model \
-   --output_frame frame_interpolation/photos/middle.png
+   --output_frame photos/middle.png
 ```
 
-This will produce the sub-frame at `t=0.5` and save as
-'frame_interpolation/photos/middle.png'.
+This will produce the sub-frame at `t=0.5` and save as 'photos/middle.png'.
 
 ### Many in-between frames interpolation
 
@@ -108,16 +108,16 @@ is expected to contain at least two input frames, with each contiguous frame
 pair treated as an input to generate in-between frames. Frames should be named such that when sorted (naturally) with `natsort`, their desired order is unchanged.
 
 ```
-python3 -m frame_interpolation.eval.interpolator_cli \
-   --pattern "frame_interpolation/photos" \
+python3 -m eval.interpolator_cli \
+   --pattern "photos" \
    --model_path <pretrained_models>/film_net/Style/saved_model \
    --times_to_interpolate 6 \
    --output_video
 ```
 
 You will find the interpolated frames (including the input frames) in
-'frame_interpolation/photos/interpolated_frames/', and the interpolated video at
-'frame_interpolation/photos/interpolated.mp4'.
+'photos/interpolated_frames/', and the interpolated video at
+'photos/interpolated.mp4'.
 
 The number of frames is determined by `--times_to_interpolate`, which controls
 the number of times the frame interpolator is invoked. When the number of frames
@@ -145,13 +145,13 @@ We have included scripts that encode the relevant frame triplets into a
 data format, and export to a TFRecord file. <br />
 
 You can use the commands `python3 -m
-frame_interpolation.datasets.create_<dataset_name>_tfrecord --help` for more information.
+datasets.create_<dataset_name>_tfrecord --help` for more information.
 
 For example, run the command below to create a TFRecord for the Middlebury-other
 dataset. Download the [images](https://vision.middlebury.edu/flow/data) and point `--input_dir` to the unzipped folder path.
 
 ```
-python3 -m frame_interpolation.datasets.create_middlebury_tfrecord \
+python3 -m datasets.create_middlebury_tfrecord \
   --input_dir=<root folder of middlebury-other> \
   --output_tfrecord_filepath=<output tfrecord filepath> \
   --num_shards=3
@@ -164,7 +164,7 @@ The above command will output a TFRecord file with 3 shards as `<output tfrecord
 Below are our training gin configuration files for the different loss function:
 
 ```
-frame_interpolation/training/
+training/
 ├── config/
 │   ├── film_net-L1.gin
 │   ├── film_net-VGG.gin
@@ -177,8 +177,8 @@ By default, it uses all visible GPUs for training. To debug or train
 on a CPU, append `--mode cpu`.
 
 ```
-python3 -m frame_interpolation.training.train \
-   --gin_config frame_interpolation/training/config/<config filename>.gin \
+python3 -m training.train \
+   --gin_config training/config/<config filename>.gin \
    --base_folder <base folder for all training runs> \
    --label <descriptive label for the run>
 ```
@@ -201,7 +201,7 @@ Optionally, to build a
 checkpoints folder, you can use this command:
 
 ```
-python3 -m frame_interpolation.training.build_saved_model_cli \
+python3 -m training.build_saved_model_cli \
    --base_folder <base folder of training sessions> \
    --label <the name of the run>
 ```
@@ -215,7 +215,7 @@ Below, we provided the evaluation gin configuration files for the benchmarks we
 have considered:
 
 ```
-frame_interpolation/eval/
+eval/
 ├── config/
 │   ├── middlebury.gin
 │   ├── ucf101.gin
@@ -228,8 +228,8 @@ To run an evaluation, simply pass the configuration file of the desired evaluati
 If a GPU is visible, it runs on it.
 
 ```
-python3 -m frame_interpolation.eval.eval_cli \
-   --gin_config frame_interpolation/eval/config/<eval_dataset>.gin \
+python3 -m eval.eval_cli \
+   --gin_config eval/config/<eval_dataset>.gin \
    --model_path <pretrained_models>/film_net/L1/saved_model
 ```
 
