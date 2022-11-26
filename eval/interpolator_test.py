@@ -26,7 +26,7 @@ The output is saved to <the directory of the input frames>/output_frame.png. If
 import os
 from typing import Sequence
 
-from . import interpolator
+from . import interpolator as interpolator_lib
 from . import util
 from absl import app
 from absl import flags
@@ -56,12 +56,12 @@ _ALIGN = flags.DEFINE_integer(
     help='If >1, pad the input size so it is evenly divisible by this value.')
 _BLOCK_HEIGHT = flags.DEFINE_integer(
     name='block_height',
-    default=None,
+    default=1,
     help='An int >= 1, number of patches along height, '
     'patch_height = height//block_height, should be evenly divisible.')
 _BLOCK_WIDTH = flags.DEFINE_integer(
     name='block_width',
-    default=None,
+    default=1,
     help='An int >= 1, number of patches along width, '
     'patch_width = width//block_width, should be evenly divisible.')
 
@@ -69,7 +69,10 @@ _BLOCK_WIDTH = flags.DEFINE_integer(
 def _run_interpolator() -> None:
   """Writes interpolated mid frame from a given two input frame filepaths."""
 
-  model_wrapper = interpolator.Interpolator(_MODEL_PATH.value, _ALIGN.value)
+  interpolator = interpolator_lib.Interpolator(
+      model_path=_MODEL_PATH.value,
+      align=_ALIGN.value,
+      block_shape=[_BLOCK_HEIGHT.value, _BLOCK_WIDTH.value])
 
   # First batched image.
   image_1 = util.read_image(_FRAME1.value)
@@ -82,30 +85,13 @@ def _run_interpolator() -> None:
   # Batched time.
   batch_dt = np.full(shape=(1,), fill_value=0.5, dtype=np.float32)
 
-  # Invoke the model once.
-  if _BLOCK_HEIGHT.value is not None and _BLOCK_WIDTH.value is not None:
-    block_shape = [_BLOCK_HEIGHT.value, _BLOCK_WIDTH.value]
-    patches_1 = util.image_to_patches(image_batch_1, block_shape)
-    patches_2 = util.image_to_patches(image_batch_2, block_shape)
-
-    output_patches = []
-    for image_1, image_2 in zip(patches_1, patches_2):
-      image_batch_1 = np.expand_dims(image_1, axis=0)
-      image_batch_2 = np.expand_dims(image_2, axis=0)
-      mid_patch = model_wrapper.interpolate(image_batch_1, image_batch_2,
-                                            batch_dt)
-      output_patches.append(mid_patch)
-    output_patches = np.concatenate(output_patches, axis=0)
-    mid_frame = util.patches_to_image(output_patches, block_shape)[0]
-  else:
-    mid_frame = model_wrapper.interpolate(image_batch_1, image_batch_2,
-                                          batch_dt)[0]
+  # Invoke the model for one mid-frame interpolation.
+  mid_frame = interpolator(image_batch_1, image_batch_2, batch_dt)[0]
 
   # Write interpolated mid-frame.
   mid_frame_filepath = _OUTPUT_FRAME.value
   if not mid_frame_filepath:
-    mid_frame_filepath = os.path.join(
-        os.path.dirname(_FRAME1.value), 'output_frame.png')
+    mid_frame_filepath = f'{os.path.dirname(_FRAME1.value)}/output_frame.png'
   util.write_image(mid_frame_filepath, mid_frame)
 
 

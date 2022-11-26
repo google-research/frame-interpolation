@@ -72,12 +72,12 @@ conda install -c conda-forge ffmpeg
 ## Running the Codes
 * One mid-frame interpolation. Note: `python3` may not be recognized in Windows, so simply drop `3` as below.
 ```
-python -m eval.interpolator_test --frame1 photos\one.png --frame2 photos\two.png --model_path <pretrained_models>\film_net\Style\saved_model --output_frame photos\middle.png
+python -m eval.interpolator_test --frame1 photos\one.png --frame2 photos\two.png --model_path <pretrained_models>\film_net\Style\saved_model --output_frame photos\output_middle.png
 ```
 
 * Large resolution mid-frame interpolation: Set `block_height` and `--block_width` to subdivide along the height and width to create patches, where the interpolator will be run iteratively, and the resulting interpolated mid-patches will be reconstructed into a final mid-frame. In the example below, will create and run on 4 patches (2*2).
 ```
-python -m eval.interpolator_test --frame1 photos\one.png --frame2 photos\two.png --block_height 2 --block_wdith 2 --model_path <pretrained_models>\film_net\Style\saved_model --output_frame photos\output_frame.png
+python -m eval.interpolator_test --frame1 photos\one.png --frame2 photos\two.png --block_height 2 --block_wdith 2 --model_path <pretrained_models>\film_net\Style\saved_model --output_frame photos\output_middle.png
 ```
 * Many in-between frames interpolation
 ```

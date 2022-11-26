@@ -96,10 +96,10 @@ python3 -m eval.interpolator_test \
    --frame1 photos/one.png \
    --frame2 photos/two.png \
    --model_path <pretrained_models>/film_net/Style/saved_model \
-   --output_frame photos/middle.png
+   --output_frame photos/output_middle.png
 ```
 
-This will produce the sub-frame at `t=0.5` and save as 'photos/middle.png'.
+This will produce the sub-frame at `t=0.5` and save as 'photos/output_middle.png'.
 
 ### Many in-between frames interpolation
 
@@ -121,8 +121,8 @@ You will find the interpolated frames (including the input frames) in
 
 The number of frames is determined by `--times_to_interpolate`, which controls
 the number of times the frame interpolator is invoked. When the number of frames
-in a directory is 2, the number of output frames will be
-`2^times_to_interpolate+1`.
+in a directory is `num_frames`, the number of output frames will be
+`(2^times_to_interpolate+1)*(num_frames-1)`.
 
 ## Datasets
 

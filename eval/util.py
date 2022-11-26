@@ -18,7 +18,6 @@ import shutil
 from typing import Generator, Iterable, List
 
 from . import interpolator as interpolator_lib
-from . import util
 import numpy as np
 import tensorflow as tf
 
@@ -59,69 +58,6 @@ def write_image(filename: str, image: np.ndarray) -> None:
   tf.io.write_file(filename, image_data)
 
 
-def image_to_patches(image: np.ndarray, block_shape: List[int]) -> np.ndarray:
-  """Folds an image into patches and stacks along the batch dimension.
-
-  Args:
-    image: The input image of shape [B, H, W, C].
-    block_shape: The number of patches along the height and width to extract.
-      Each patch is shaped (H/block_shape[0], W/block_shape[1])
-
-  Returns:
-    The extracted patches shaped [num_blocks, patch_height, patch_width,...],
-      with num_blocks = block_shape[0] * block_shape[1].
-  """
-  block_height, block_width = block_shape
-  num_blocks = block_height * block_width
-
-  height, width, channel = image.shape[-3:]
-  patch_height, patch_width = height//block_height, width//block_width
- 
-  assert height == (
-      patch_height * block_height
-  ), 'block_height=%d should evenly divide height=%d.'%(block_height, height)
-  assert width == (
-      patch_width * block_width
-  ), 'block_width=%d should evenly divide width=%d.'%(block_width, width)
-
-  patch_size = patch_height * patch_width
-  paddings = 2*[[0, 0]]
-
-  patches = tf.space_to_batch(image, [patch_height, patch_width], paddings)
-  patches = tf.split(patches, patch_size, 0)
-  patches = tf.stack(patches, axis=3)
-  patches = tf.reshape(patches,
-                       [num_blocks, patch_height, patch_width, channel])
-  return patches.numpy()
-
-
-def patches_to_image(patches: np.ndarray, block_shape: List[int]) -> np.ndarray:
-  """Unfolds patches (stacked along batch) into an image.
-
-  Args:
-    patches: The input patches, shaped [num_patches, patch_H, patch_W, C].
-    block_shape: The number of patches along the height and width to unfold.
-      Each patch assumed to be shaped (H/block_shape[0], W/block_shape[1]).
-
-  Returns:
-    The unfolded image shaped [B, H, W, C].
-  """
-  block_height, block_width = block_shape
-  paddings = 2 * [[0, 0]]
-
-  patch_height, patch_width, channel = patches.shape[-3:]
-  patch_size = patch_height * patch_width
-
-  patches = tf.reshape(patches,
-                       [1, block_height, block_width, patch_size, channel])
-  patches = tf.split(patches, patch_size, axis=3)
-  patches = tf.stack(patches, axis=0)
-  patches = tf.reshape(patches,
-                       [patch_size, block_height, block_width, channel])
-  image = tf.batch_to_space(patches, [patch_height, patch_width], paddings)
-  return image.numpy()
-
-
 def _recursive_generator(
     frame1: np.ndarray, frame2: np.ndarray, num_recursions: int,
     interpolator: interpolator_lib.Interpolator
@@ -144,8 +80,8 @@ def _recursive_generator(
     # Adds the batch dimension to all inputs before calling the interpolator,
     # and remove it afterwards.
     time = np.full(shape=(1,), fill_value=0.5, dtype=np.float32)
-    mid_frame = interpolator.interpolate(
-        np.expand_dims(frame1, axis=0), np.expand_dims(frame2, axis=0), time)[0]
+    mid_frame = interpolator(frame1[np.newaxis, ...], frame2[np.newaxis, ...],
+                             time)[0]
     yield from _recursive_generator(frame1, mid_frame, num_recursions - 1,
                                     interpolator)
     yield from _recursive_generator(mid_frame, frame2, num_recursions - 1,
@@ -176,10 +112,10 @@ def interpolate_recursively_from_files(
   n = len(frames)
   for i in range(1, n):
     yield from _recursive_generator(
-        util.read_image(frames[i - 1]), util.read_image(frames[i]),
-        times_to_interpolate, interpolator)
+        read_image(frames[i - 1]), read_image(frames[i]), times_to_interpolate,
+        interpolator)
   # Separately yield the final frame.
-  yield util.read_image(frames[-1])
+  yield read_image(frames[-1])
 
 
 def interpolate_recursively_from_memory(
