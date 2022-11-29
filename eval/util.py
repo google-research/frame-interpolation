@@ -15,9 +15,14 @@
 """Utility functions for frame interpolation on a set of video frames."""
 import os
 import shutil
+import subprocess
 from typing import Generator, Iterable, List
+from typing import Optional
+from tqdm import tqdm
 
 from . import interpolator as interpolator_lib
+from . import util
+from absl import logging
 import numpy as np
 import tensorflow as tf
 
@@ -80,8 +85,8 @@ def _recursive_generator(
     # Adds the batch dimension to all inputs before calling the interpolator,
     # and remove it afterwards.
     time = np.full(shape=(1,), fill_value=0.5, dtype=np.float32)
-    mid_frame = interpolator(frame1[np.newaxis, ...], frame2[np.newaxis, ...],
-                             time)[0]
+    mid_frame = interpolator.interpolate(
+        np.expand_dims(frame1, axis=0), np.expand_dims(frame2, axis=0), time)[0]
     yield from _recursive_generator(frame1, mid_frame, num_recursions - 1,
                                     interpolator)
     yield from _recursive_generator(mid_frame, frame2, num_recursions - 1,
@@ -110,12 +115,12 @@ def interpolate_recursively_from_files(
     The interpolated frames (including the inputs).
   """
   n = len(frames)
-  for i in range(1, n):
+  for i in tqdm(range(1, n), ncols = 100, colour = 'green'):
     yield from _recursive_generator(
-        read_image(frames[i - 1]), read_image(frames[i]), times_to_interpolate,
-        interpolator)
+        util.read_image(frames[i - 1]), util.read_image(frames[i]),
+        times_to_interpolate, interpolator)
   # Separately yield the final frame.
-  yield read_image(frames[-1])
+  yield util.read_image(frames[-1])
 
 
 def interpolate_recursively_from_memory(
@@ -140,7 +145,7 @@ def interpolate_recursively_from_memory(
     The interpolated frames (including the inputs).
   """
   n = len(frames)
-  for i in range(1, n):
+  for i in tqdm(range(1, n), ncols = 100, colour = 'green'):
     yield from _recursive_generator(
         frames[i - 1], frames[i],
         times_to_interpolate, interpolator)
