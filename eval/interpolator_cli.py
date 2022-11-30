@@ -76,6 +76,7 @@ import mediapy as media
 import natsort
 import numpy as np
 import tensorflow as tf
+from tqdm.auto import tqdm
 
 
 _PATTERN = flags.DEFINE_string(
@@ -139,7 +140,8 @@ def _output_frames(frames: List[np.ndarray], frames_dir: str):
         tf.io.gfile.remove(old_frame)
   else:
     tf.io.gfile.makedirs(frames_dir)
-  for idx, frame in enumerate(frames):
+  for idx, frame in tqdm(
+      enumerate(frames), total=len(frames), ncols=100, colour='green'):
     util.write_image(f'{frames_dir}/frame_{idx:03d}.png', frame)
   logging.info('Output frames saved in %s.', frames_dir)
 

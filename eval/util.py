@@ -15,11 +15,12 @@
 """Utility functions for frame interpolation on a set of video frames."""
 import os
 import shutil
-from typing import Generator, Iterable, List
+from typing import Generator, Iterable, List, Optional
 
 from . import interpolator as interpolator_lib
 import numpy as np
 import tensorflow as tf
+from tqdm import tqdm
 
 _UINT8_MAX_F = float(np.iinfo(np.uint8).max)
 _CONFIG_FFMPEG_NAME_OR_PATH = 'ffmpeg'
@@ -60,7 +61,8 @@ def write_image(filename: str, image: np.ndarray) -> None:
 
 def _recursive_generator(
     frame1: np.ndarray, frame2: np.ndarray, num_recursions: int,
-    interpolator: interpolator_lib.Interpolator
+    interpolator: interpolator_lib.Interpolator,
+    bar: Optional[tqdm] = None
 ) -> Generator[np.ndarray, None, None]:
   """Splits halfway to repeatedly generate more frames.
 
@@ -82,10 +84,11 @@ def _recursive_generator(
     time = np.full(shape=(1,), fill_value=0.5, dtype=np.float32)
     mid_frame = interpolator(frame1[np.newaxis, ...], frame2[np.newaxis, ...],
                              time)[0]
+    bar.update(1) if bar is not None else bar
     yield from _recursive_generator(frame1, mid_frame, num_recursions - 1,
-                                    interpolator)
+                                    interpolator, bar)
     yield from _recursive_generator(mid_frame, frame2, num_recursions - 1,
-                                    interpolator)
+                                    interpolator, bar)
 
 
 def interpolate_recursively_from_files(
@@ -110,13 +113,14 @@ def interpolate_recursively_from_files(
     The interpolated frames (including the inputs).
   """
   n = len(frames)
+  num_frames = (n - 1) * (2**(times_to_interpolate) - 1)
+  bar = tqdm(total=num_frames, ncols=100, colour='green')
   for i in range(1, n):
     yield from _recursive_generator(
         read_image(frames[i - 1]), read_image(frames[i]), times_to_interpolate,
-        interpolator)
+        interpolator, bar)
   # Separately yield the final frame.
   yield read_image(frames[-1])
-
 
 def interpolate_recursively_from_memory(
     frames: List[np.ndarray], times_to_interpolate: int,
@@ -140,10 +144,11 @@ def interpolate_recursively_from_memory(
     The interpolated frames (including the inputs).
   """
   n = len(frames)
+  num_frames = (n - 1) * (2**(times_to_interpolate) - 1)
+  bar = tqdm(total=num_frames, ncols=100, colour='green')
   for i in range(1, n):
-    yield from _recursive_generator(
-        frames[i - 1], frames[i],
-        times_to_interpolate, interpolator)
+    yield from _recursive_generator(frames[i - 1], frames[i],
+                                    times_to_interpolate, interpolator, bar)
   # Separately yield the final frame.
   yield frames[-1]
 
