@@ -32,6 +32,10 @@ from absl import app
 from absl import flags
 import numpy as np
 
+# Controls TF_CCP log level.
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+
+
 _FRAME1 = flags.DEFINE_string(
     name='frame1',
     default=None,

@@ -78,6 +78,9 @@ import numpy as np
 import tensorflow as tf
 from tqdm.auto import tqdm
 
+# Controls TF_CCP log level.
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+
 
 _PATTERN = flags.DEFINE_string(
     name='pattern',
