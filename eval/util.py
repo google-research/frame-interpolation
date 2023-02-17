@@ -27,7 +27,7 @@ _CONFIG_FFMPEG_NAME_OR_PATH = 'ffmpeg'
 
 
 def read_image(filename: str) -> np.ndarray:
-  """Reads an sRgb 8-bit image.
+  """Reads an sRgb 16-bit image.
 
   Args:
     filename: The input filename to read.
@@ -36,9 +36,13 @@ def read_image(filename: str) -> np.ndarray:
     A float32 3-channel (RGB) ndarray with colors in the [0..1] range.
   """
   image_data = tf.io.read_file(filename)
-  image = tf.io.decode_image(image_data, channels=3)
-  image_numpy = tf.cast(image, dtype=tf.float32).numpy()
-  return image_numpy / _UINT8_MAX_F
+  image = tf.io.decode_png(image_data, channels=3, dtype=tf.uint16)
+  # Rescale to [0..1] range from [0..2^16-1]
+  image_numpy = tf.cast(image, dtype=tf.float32) / (2**16 - 1)
+  # Apply gamma correction, could be 2.2
+  image_numpy = tf.pow(image_numpy, 1)
+
+  return image_numpy
 
 
 def write_image(filename: str, image: np.ndarray) -> None:
@@ -48,14 +52,15 @@ def write_image(filename: str, image: np.ndarray) -> None:
     filename: The output filename to save.
     image: A float32 3-channel (RGB) ndarray with colors in the [0..1] range.
   """
-  image_in_uint8_range = np.clip(image * _UINT8_MAX_F, 0.0, _UINT8_MAX_F)
-  image_in_uint8 = (image_in_uint8_range + 0.5).astype(np.uint8)
+  image_in_uint16_range = np.clip(image * (2**16 - 1), 0, 2**16 - 1)
+  # Add some noise to the image to reduce color banding
+  noise = np.random.normal(scale=2, size=image_in_uint16_range.shape)
+  noisy_image = image_in_uint16_range + noise
+  # Convert to uint16
+  noisy_image = np.clip(noisy_image, 0, 2**16 - 1).astype(np.uint16)
 
-  extension = os.path.splitext(filename)[1]
-  if extension == '.jpg':
-    image_data = tf.io.encode_jpeg(image_in_uint8)
-  else:
-    image_data = tf.io.encode_png(image_in_uint8)
+  # Use PNG with 48-bit compression
+  image_data = tf.image.encode_png(noisy_image, compression=-1)
   tf.io.write_file(filename, image_data)
 
 
