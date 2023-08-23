@@ -44,10 +44,10 @@ from absl import app
 from absl import flags
 from absl import logging
 import gin.tf
-from ..losses import losses
+from losses import losses
 import numpy as np
 import tensorflow as tf
-from ..training import data_lib
+from training import data_lib
 
 
 _GIN_CONFIG = flags.DEFINE_string('gin_config', None, 'Gin config file.')

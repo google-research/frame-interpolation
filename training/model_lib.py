@@ -23,8 +23,8 @@ analysis or custom losses.
 """
 
 import gin.tf
-from ..models.film_net import interpolator as film_net_interpolator
-from ..models.film_net import options as film_net_options
+from models.film_net import interpolator as film_net_interpolator
+from models.film_net import options as film_net_options
 
 import tensorflow as tf
 
